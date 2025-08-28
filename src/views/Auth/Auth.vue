@@ -11,7 +11,7 @@
 
 <style scoped lang="scss">
 .box-auth {
-  height: 50%;
-  background-color: #eee;
+  height: 100%;
+  background-color: #f8f8f8;
 }
 </style>

@@ -1,9 +1,18 @@
 <script setup lang="ts">
 const props = defineProps({
+  moduleValue: {
+    type: String,
+    default: ''
+  },
+  label: {
+    type: String,
+    default: '',
+    description: '标签'
+  },
   type: {
     type: String,
     default: 'text',
-    enum: ['text', 'password', 'email'],
+    validator: (value: string) => ['text', 'password', 'email'].includes(value),
     description: '输入框类型'
   },
   errorMessage: {
@@ -23,18 +32,45 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请输入',
+    default: '',
     descriptioon: '占位文本'
   }
 }) 
 </script>
 
 <template>
-  <div>
+  <div class="box-input">
+    <label>{{ label }}</label>
     <input :type="type" :placeholder="placeholder" :maxlength="maxLength" :minlength="minLength">
-    <small>{{ props.errorMessage }}</small>
+    <small>{{ errorMessage }}</small>
   </div>
 
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.box-input {
+  margin: 0.25rem 0;
+
+  label {
+    display: block;
+    color: $color-gray;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin: 0.25rem 0;
+    border: 1px solid $color-gray-light;
+    background-color: $color-black;
+    color: $color-white;
+    outline: none;
+  }
+
+  small {
+    display: block;
+    font-size: 0.75rem;
+    color: $color-red;
+  }
+}
+</style>
