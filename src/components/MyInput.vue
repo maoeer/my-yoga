@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+
 const props = withDefaults(defineProps<{
   modelValue: string
   label?: string
@@ -16,14 +18,32 @@ const props = withDefaults(defineProps<{
   placeholder: ''
 })
 
+const isOnceBlur = ref<boolean>(false) // 是否已经触发第一次blur
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
   (e: 'blur', valid: boolean): void
 }>()
 
+// 校验结果
+const isValid = computed(() => {
+  if (!props.validator) return true
+  return props.validator(props.modelValue)
+})
+// 是否展示错误消息
+const shouldShowError = computed(() => {
+  return isOnceBlur.value && !isValid.value
+})
+
+const handleInput = (e: Event): void => {
+  const newValue = (e.target as HTMLInputElement).value
+  emit('update:modelValue', newValue)
+}
+
 const handleBlur = (): void => {
+  if (!isOnceBlur.value) isOnceBlur.value = true
   if (!props.validator) return
-  emit('blur', props.validator ? props.validator(props.modelValue) : true)
+
+  emit('blur', isValid.value)
 }
 </script>
 
@@ -31,8 +51,8 @@ const handleBlur = (): void => {
   <div class="box-input">
     <label v-if="label">{{ label }}</label>
     <input :value="modelValue" :type="type" :placeholder="placeholder" :maxlength="maxLength" :minlength="minLength"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" @blur="handleBlur">
-    <small v-if="errorMessage">{{ errorMessage }}</small>
+      @input="handleInput" @blur="handleBlur">
+    <small v-if="errorMessage && shouldShowError">{{ errorMessage }}</small>
   </div>
 </template>
 
