@@ -1,11 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
+import { validateEmail, validateLength } from '@/utils/validate'
 import MyInput from '@/components/MyInput.vue'
 
-// 输入框数据
-const inputData = ref<string>('')
+interface IFormData {
+  email: string,
+  password: string
+}
+
+// 表单数据
+const formData = reactive<IFormData>({
+  email: '',
+  password: ''
+})
+
 // 表单提交
-const formSubmit = () => { }
+const formSubmit = () => {
+  let error = ''
+  // 校验邮箱
+  if (!validateEmail(formData.email)) {
+    error = ''
+  }
+
+  if (!validateLength(8, 20, formData.password)) {
+    error = ''
+  }
+
+  // todo: 提交表单
+}
 </script>
 
 <template>
@@ -13,9 +35,9 @@ const formSubmit = () => { }
     <p class="title">登录</p>
 
     <form @submit.prevent="formSubmit">
-      <my-input v-model="inputData" label="邮箱" type="email" error-message="请输入正确的邮箱" placeholder="请输入邮箱" />
+      <my-input v-model="formData.email" label="邮箱" type="email" error-message="请输入正确的邮箱" placeholder="请输入邮箱" />
 
-      <my-input v-model="inputData" label="密码" type="password" error-message="密码长度为6-20" placeholder="请输入密码" />
+      <my-input v-model="formData.password" label="密码" type="password" error-message="密码长度为6-20" placeholder="请输入密码" />
 
       <input type="submit" class="submit-button" />
     </form>

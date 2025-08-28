@@ -1,36 +1,37 @@
 <script setup lang="ts">
-
-withDefaults(defineProps<{
-  modelValue: string,
+const props = withDefaults(defineProps<{
+  modelValue: string
   label?: string
   type?: 'text' | 'password' | 'email'
   errorMessage?: string
   minLength?: number
   maxLength?: number
-  placeholder?: string,
-  inputId?: string
+  placeholder?: string
+  validator?: (value: string) => boolean
 }>(), {
   modelValue: '',
-  label: '',
   type: 'text',
-  errorMessage: '',
   minLength: 8,
   maxLength: 20,
   placeholder: ''
 })
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
-  (e: 'blur'): void
+  (e: 'blur', valid: boolean): void
 }>()
+
+const handleBlur = (): void => {
+  if (!props.validator) return
+  emit('blur', props.validator ? props.validator(props.modelValue) : true)
+}
 </script>
 
 <template>
   <div class="box-input">
-    <label v-if="label" :for="inputId">{{ label }}</label>
-    <input id="inputId" :value="modelValue" :type="type" :placeholder="placeholder" :maxlength="maxLength"
-      :minlength="minLength" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-      @blur="$emit('blur')">
+    <label v-if="label">{{ label }}</label>
+    <input :value="modelValue" :type="type" :placeholder="placeholder" :maxlength="maxLength" :minlength="minLength"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" @blur="handleBlur">
     <small v-if="errorMessage">{{ errorMessage }}</small>
   </div>
 </template>
