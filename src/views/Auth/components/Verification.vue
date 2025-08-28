@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    Register页面
+    Verification页面
   </div>
 </template>
 

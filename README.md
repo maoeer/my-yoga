@@ -11,5 +11,3 @@ npm create vite@latest
 - 状态管理：Pinia
 - 样式解决方案： Sass
 - 网络请求：Axios
-
-测试dev分支合并

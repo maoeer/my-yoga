@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import Login from '@/views/Auth/Login.vue'
+import Login from '@/views/Auth/components/Login.vue'
 
 // 定义路由规则
 const routes: Array<RouteRecordRaw> = [
@@ -20,8 +20,8 @@ const routes: Array<RouteRecordRaw> = [
         component: Login
       },
       {
-        path: 'register',
-        component: () => import('@/views/Auth/Register.vue')
+        path: 'verification',
+        component: () => import('@/views/Auth/components/Verification.vue')
       }
     ]
   },
