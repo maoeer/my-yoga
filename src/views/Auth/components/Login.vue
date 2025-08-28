@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import MyInput from '@/components/MyInput.vue'
 
 // 输入框数据
-const inputData = ref<String>('')
+const inputData = ref<string>('')
 // 表单提交
 const formSubmit = () => { }
 </script>

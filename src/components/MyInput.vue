@@ -1,48 +1,37 @@
 <script setup lang="ts">
-defineProps({
-  moduleValue: {
-    type: String,
-    default: ''
-  },
-  label: {
-    type: String,
-    default: '',
-    description: '标签'
-  },
-  type: {
-    type: String,
-    default: 'text',
-    validator: (value: string) => ['text', 'password', 'email'].includes(value),
-    description: '输入框类型'
-  },
-  errorMessage: {
-    type: String,
-    default: '错误输入',
-    description: '错误提示'
-  },
-  minLength: {
-    type: Number,
-    default: 8,
-    description: '最小长度'
-  },
-  maxLength: {
-    type: Number,
-    default: 20,
-    description: '最大长度'
-  },
-  placeholder: {
-    type: String,
-    default: '',
-    descriptioon: '占位文本'
-  }
-}) 
+
+withDefaults(defineProps<{
+  modelValue: string,
+  label?: string
+  type?: 'text' | 'password' | 'email'
+  errorMessage?: string
+  minLength?: number
+  maxLength?: number
+  placeholder?: string,
+  inputId?: string
+}>(), {
+  modelValue: '',
+  label: '',
+  type: 'text',
+  errorMessage: '',
+  minLength: 8,
+  maxLength: 20,
+  placeholder: ''
+})
+
+defineEmits<{
+  (e: 'update:modelValue', value: string): void
+  (e: 'blur'): void
+}>()
 </script>
 
 <template>
   <div class="box-input">
-    <label>{{ label }}</label>
-    <input :type="type" :placeholder="placeholder" :maxlength="maxLength" :minlength="minLength">
-    <small>{{ errorMessage }}</small>
+    <label v-if="label" :for="inputId">{{ label }}</label>
+    <input id="inputId" :value="modelValue" :type="type" :placeholder="placeholder" :maxlength="maxLength"
+      :minlength="minLength" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @blur="$emit('blur')">
+    <small v-if="errorMessage">{{ errorMessage }}</small>
   </div>
 </template>
 
@@ -50,8 +39,12 @@ defineProps({
 .box-input {
   margin: 0.25rem 0;
 
-  label {
+  label,
+  small {
     display: block;
+  }
+
+  label {
     color: $color-gray;
   }
 
@@ -67,7 +60,6 @@ defineProps({
   }
 
   small {
-    display: block;
     font-size: 0.75rem;
     color: $color-red;
   }
