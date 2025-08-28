@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, toValue } from 'vue'
+import { reactive } from 'vue'
 import { validateEmail, validateLength } from '@/utils/validate'
 import MyInput from '@/components/MyInput.vue'
 
