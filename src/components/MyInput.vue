@@ -44,7 +44,6 @@ const props = defineProps({
     <input :type="type" :placeholder="placeholder" :maxlength="maxLength" :minlength="minLength">
     <small>{{ errorMessage }}</small>
   </div>
-
 </template>
 
 <style scoped lang="scss">
